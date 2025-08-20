@@ -1,40 +1,39 @@
 #import <UIKit/UIKit.h>
 #import "XhsSettingsViewController.h"
 
-@interface TTTAttributedLabel : UILabel
-@property (nonatomic, assign) NSTimeInterval lastClickTime;
+@interface XYSettingNavigationBar : UINavigationBar
 @end
 
-static NSTimeInterval lastClickTime = 0;
+%hook XYSettingNavigationBar
 
-%hook TTTAttributedLabel
+- (void)layoutSubviews {
+    %orig;
 
-- (void)touchesBegan:(id)arg1 withEvent:(id)arg2 {
-    if (lastClickTime == 0) {
-        NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-        lastClickTime = currentTime;
-        NSLog(@"[XhsPlus] 初始化 lastClickTime: %f", lastClickTime);
-        %orig;
-        return;
-    }
-    
-    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    NSTimeInterval timeSinceLastClick = currentTime - lastClickTime;
-    
-    NSLog(@"[XhsPlus] 当前时间: %f, 上次点击时间: %f", currentTime, lastClickTime);
-    if (timeSinceLastClick < 0.5) {
-        NSLog(@"[XhsPlus] 检测到双击");
-        // 在调用 showSettings 时，附加当前的暗黑模式状态作为参数
-        [XhsSettingsViewController showSettings];
-    } else {
-        NSLog(@"[XhsPlus] 检测到单击");
-        lastClickTime = currentTime;
-        %orig;
-        return;
-    }
+    NSLog(@"[XhsPlus] layoutSubviews in XYSettingNavigationBar");
+
+    // Tránh thêm nhiều lần
+    if ([self viewWithTag:9999]) return;
+
+    UIButton *xhsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [xhsButton setTitle:@"⚙️" forState:UIControlStateNormal];
+    xhsButton.frame = CGRectMake(self.bounds.size.width - 60, 40, 50, 36);
+    xhsButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
+    xhsButton.tag = 9999;
+
+    [xhsButton addTarget:self action:@selector(xhs_openSettings) forControlEvents:UIControlEventTouchUpInside];
+
+    [self addSubview:xhsButton];
+}
+
+%new
+- (void)xhs_openSettings {
+    NSLog(@"[XhsPlus] 点击导航栏按钮，打开设置");
+    [XhsSettingsViewController showSettings];
 }
 
 %end
+
+
 
 @interface XYTabBar : UIView
 @property (nonatomic, copy) NSArray *tabs;
