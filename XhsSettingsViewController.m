@@ -68,10 +68,10 @@ static XhsSettingsViewController *instance = nil;
 
 - (void)setupOptions {
     options = @[
-        @{@"title": @"去除底栏购物", @"key": @"remove_tab_shopping"},
-        @{@"title": @"去除底栏加号", @"key": @"remove_tab_post"},
-        @{@"title": @"去除保存水印", @"key": @"remove_save_watermark"},
-        @{@"title": @"强制保存媒体", @"key": @"force_save_media"}
+        @{@"title": @"Remove bottom tab shopping", @"key": @"remove_tab_shopping"},
+        @{@"title": @"Remove bottom tab plus button", @"key": @"remove_tab_post"},
+        @{@"title": @"Remove save watermark", @"key": @"remove_save_watermark"},
+        @{@"title": @"Force save media", @"key": @"force_save_media"}
     ];
 }
 
@@ -82,17 +82,18 @@ static XhsSettingsViewController *instance = nil;
         self.view.backgroundColor = [UIColor whiteColor];
     }
 
-    self.navigationItem.title = @"小红书+";
+    self.navigationItem.title = @"Xiaohongshu+";
 
-    UIBarButtonItem *leftButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"结束进程" style:UIBarButtonItemStylePlain target:self action:@selector(killProcess)];
+    UIBarButtonItem *leftButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"End Process" style:UIBarButtonItemStylePlain target:self action:@selector(killProcess)];
     [leftButtonItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor redColor]} forState:UIControlStateNormal];
     self.navigationItem.leftBarButtonItem = leftButtonItem;
 
-    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"关闭窗口" style:UIBarButtonItemStylePlain target:self action:@selector(dismissSettings)];
+    UIBarButtonItem *rightButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close Window" style:UIBarButtonItemStylePlain target:self action:@selector(dismissSettings)];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
 
     [self setupTableView];
 }
+
 
 - (void)setupTableView {
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
@@ -133,17 +134,17 @@ static XhsSettingsViewController *instance = nil;
         cell.accessoryView = switchView;
     } else {
         if (indexPath.row == 0) {
-            // 版本
-            cell.textLabel.text = @"小红书+ v0.0.1 @维他入我心";
+            cell.textLabel.text = @"Xiaohongshu+ v0.0.1 @VitaherInMyHeart";
             cell.userInteractionEnabled = NO;
         } else if (indexPath.row == 1) {
             // GitHub
-            cell.textLabel.text = @"GitHub 开源地址";
+            cell.textLabel.text = @"GitHub Repository";
         } else if (indexPath.row == 2) {
             // Telegram
-            cell.textLabel.text = @"Telegram 反馈地址";
+            cell.textLabel.text = @"Telegram Feedback";
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
     }
 
     return cell;
@@ -155,9 +156,9 @@ static XhsSettingsViewController *instance = nil;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"设置";
+        return @"Settings";
     } else if (section == 1) {
-        return @"关于";
+        return @"About";
     } else {
         return nil;
     }
